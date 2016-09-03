@@ -1,0 +1,16 @@
+@CHARSET "UTF-8";
+
+.frm { width:100%; margin-bottom:50px; }
+.frm table { line-height:2em; }
+.frm label { display:inline-block; width:50px; }
+.frm input { width:550px; }
+.frm textarea { width:560px; height:300px; resize:none; }
+.frm td[colspan="2"] { text-align:right; line-height:1em; }
+
+.list { border:1px solid #fff; border-radius:10px; padding:10px; position:relative; margin-bottom:30px; }
+.list li:nth-child(1) { font-family:NanumEX; border-bottom:1px dotted #fff; margin-bottom:20px; padding-bottom:5px; }
+.list li:nth-child(2) { position:absolute; top:10px; right:10px; }
+.list li:nth-child(3) { line-height:1.5em; }
+.list li:nth-child(4) { border-top:1px dotted #fff; margin-top:20px; padding-top:5px; text-align:right; }
+
+.paging { text-align:center; }

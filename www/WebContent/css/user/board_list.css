@@ -1,0 +1,8 @@
+@CHARSET "UTF-8";
+
+.row_header li:nth-child(1), .rows li:nth-child(1) { width:12%; }
+.row_header li:nth-child(2), .rows li:nth-child(2) { width:38%; }
+.rows li:nth-child(2) { text-align:left; }
+.row_header li:nth-child(3), .rows li:nth-child(3) { width:15%; }
+.row_header li:nth-child(4), .rows li:nth-child(4) { width:20%; }
+.row_header li:nth-child(5), .rows li:nth-child(5) { width:10%; }

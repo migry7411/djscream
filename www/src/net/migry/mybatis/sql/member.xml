@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mybatis.member">
+
+        <resultMap id="resultMember" type="memberDTO">
+        	<id property="userid" column="USERID" javaType="java.lang.String" />
+        	<result property="username" column="USERNAME" javaType="java.lang.String" />
+        	<result property="nickname" column="NICKNAME" javaType="java.lang.String" />
+        	<result property="password" column="PASSWORD" javaType="java.lang.String" />
+        	<result property="email" column="EMAIL" javaType="java.lang.String" />
+        	<result property="phone" column="PHONE" javaType="java.lang.String" />
+        	<result property="birthdate" column="BIRTHDATE" javaType="java.lang.String" />
+        	<result property="birthtype" column="BIRTHTYPE" javaType="java.lang.String" />
+        	<result property="sex" column="SEX" javaType="java.lang.String" />
+        	<result property="regdate" column="REGDATE" javaType="java.lang.String" />
+        	<result property="accedate" column="ACCEDATE" javaType="java.lang.String" />
+        	<result property="accetime" column="ACCETIME" javaType="java.lang.String" />
+        </resultMap>
+        
+        <sql id="columnMember">
+        	USERID,
+        	USERNAME,
+			NICKNAME,
+			PASSWORD,
+			EMAIL,
+			PHONE,
+			BIRTHDATE,
+			BIRTHTYPE,
+			SEX,
+			REGDATE ,
+			ACCEDATE,
+			ACCETIME,
+			DEL
+        </sql>
+        
+        <select id="selectMember" parameterType="searchDTO" resultMap="resultMember">
+              SELECT T.* FROM (
+	              SELECT @RNUM := @RNUM + 1 AS ROWNUM, A.* FROM (
+	              	SELECT <include refid="columnMember" /> FROM TB_MEMBER
+	              	WHERE DEL = 'N'
+	              	<if test="searchWord != null and searchWord != ''">
+	              		AND ${searchColumn} LIKE '%${searchWord}%'
+	              	</if>
+	              	ORDER BY USERID
+	              ) A,
+	              ( SELECT @RNUM := 0 ) R
+              ) T
+              WHERE <![CDATA[ T.ROWNUM >= #{startRow} and T.ROWNUM <= #{endRow} ]]>
+        </select>
+        
+        <select id="countMember" parameterType="searchDTO" resultType="int">
+        	SELECT COUNT(*) FROM TB_MEMBER
+        	WHERE DEL = 'N'
+        	<if test="searchWord != null and searchWord != ''">
+           		AND ${searchColumn} LIKE '%${searchWord}%'
+           	</if>
+        </select>
+        
+        <select id="selectMemberOne" parameterType="java.util.Map" resultType="memberDTO">
+              SELECT
+               	<include refid="columnMember" />
+              FROM TB_MEMBER
+              <where>
+                  <if test="userid != null and userid != ''">
+                       USERID = #{userid}
+                  </if>
+              </where>
+        </select>
+        
+        <insert id="insertMember" parameterType="memberDTO">
+	        INSERT INTO TB_MEMBER(
+	        	<include refid="columnMember" />
+	        )
+	        VALUES(
+	        	#{userid},
+				#{username},
+				#{nickname},
+				#{password},
+				#{email},
+				#{phone},
+				#{birthdate},
+				#{birthtype},
+				#{sex},
+				DATE_FORMAT(now(), '%Y-%m-%d'),
+				DATE_FORMAT(now(), '%Y-%m-%d'),
+				DATE_FORMAT(now(), '%H:%i:%s'),
+				'N'
+	        )
+        </insert>
+        
+        <update id="updateMember" parameterType="memberDTO">
+	        UPDATE TB_MEMBER SET
+	        	USERNAME = #{username},
+				NICKNAME = #{nickname},
+				EMAIL = #{email},
+				PHONE = #{phone},
+				BIRTHDATE = #{birthdate},
+				BIRTHTYPE = #{birthtype},
+				SEX = #{sex}
+			WHERE USERID = #{userid}
+        </update>
+        
+        <update id="updateMemberAccess" parameterType="java.util.Map">
+	        UPDATE TB_MEMBER SET
+	        	ACCEDATE = DATE_FORMAT(now(), '%Y-%m-%d'),
+	        	ACCETIME = DATE_FORMAT(now(), '%H:%i:%s')
+			WHERE USERID = #{userid}
+        </update>
+        
+        <update id="deleteMember" parameterType="java.util.Map">
+        	UPDATE TB_MEMBER SET DEL = 'Y'
+			WHERE USERID = #{userid}
+        </update>
+        
+        <select id="findMember" parameterType="java.util.Map" resultType="String">
+        	SELECT ${column} FROM TB_MEMBER
+        	WHERE DEL = 'N' AND EMAIL = #{email}
+        	<if test="column == 'USERID'">
+           		AND USERNAME = #{username}
+           	</if>
+        	<if test="column == 'PASSWORD'">
+           		AND USERID = #{userid}
+           	</if>
+        </select>
+        
+        <select id="checkMember" parameterType="java.util.Map" resultType="String">
+        	SELECT USERID FROM TB_MEMBER
+        	<where>
+	        	<if test="column == 'USERID'">
+	           		USERID = #{value}
+	           	</if>
+	        	<if test="column == 'NICKNAME'">
+	           		NICKNAME = #{value}
+	           	</if>
+	           	<if test="column == 'EMAIL'">
+	           		EMAIL = #{value}
+	           	</if>
+           	</where>
+        </select>
+
+</mapper>
+
+
+

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mybatis.board">
+	
+	<resultMap id="resultBoard" type="boardDTO">
+		<id property="id" column="ID" javaType="java.lang.Integer" />
+		<result property="code" column="CODE" javaType="java.lang.String" />
+		<result property="userid" column="USERID" javaType="java.lang.String" />
+		<result property="name" column="NAME" javaType="java.lang.String" />
+		<result property="subject" column="SUBJECT" javaType="java.lang.String" />
+		<result property="contents" column="CONTENTS" javaType="java.lang.String" />
+		<result property="passwd" column="PASSWD" javaType="java.lang.String" />
+		<result property="filename" column="FILENAME" javaType="java.lang.String" />
+		<result property="filesize" column="FILESIZE" javaType="java.lang.Integer" />
+		<result property="readcount" column="READCOUNT" javaType="java.lang.Integer" />
+		<result property="regdate" column="REGDATE" javaType="java.lang.String" />
+	</resultMap>
+	
+	<resultMap id="resultBoardReply" type="boardReplyDTO">
+		<id property="id" column="ID" javaType="java.lang.Integer" />
+		<result property="boardid" column="BOARDID" javaType="java.lang.String" />
+		<result property="name" column="NAME" javaType="java.lang.String" />
+		<result property="userid" column="USERID" javaType="java.lang.String" />
+		<result property="contents" column="CONTENTS" javaType="java.lang.String" />
+		<result property="regdate" column="REGDATE" javaType="java.lang.String" />
+	</resultMap>
+	
+	<sql id="columnBoard">
+		ID,
+		CODE,
+		USERID,
+		NAME,
+		SUBJECT,
+		CONTENTS,
+		PASSWD,
+		FILENAME,
+		FILESIZE,
+		READCOUNT,
+		REGDATE,
+		DEL
+	</sql>
+	
+	<sql id="columnBoardReply">
+		ID,
+		BOARDID,
+		USERID,
+		NAME,
+		CONTENTS,
+		REGDATE
+	</sql>
+	
+	<select id="selectBoard" parameterType="searchDTO" resultMap="resultBoard">
+		SELECT T.* FROM (
+			SELECT @RNUM := @RNUM + 1 AS ROWNUM, A.* FROM (
+				SELECT <include refid="columnBoard" /> FROM TB_BOARD
+				WHERE CODE = #{code} AND DEL = 'N'
+				<if test="searchWord != null and searchWord != ''">
+					AND ${searchColumn} LIKE '%${searchWord}%'
+				</if>
+				ORDER BY ID DESC
+			) A,
+			( SELECT @RNUM := 0 ) R
+		) T
+		WHERE <![CDATA[ T.ROWNUM >= #{startRow} and T.ROWNUM <= #{endRow} ]]>
+	</select>
+	
+	<select id="countBoard" parameterType="searchDTO" resultType="int">
+		SELECT COUNT(*) FROM TB_BOARD
+		WHERE CODE = #{code} AND DEL = 'N'
+		<if test="searchWord != null and searchWord != ''">
+			AND ${searchColumn} LIKE '%${searchWord}%'
+		</if>
+	</select>
+	
+	<select id="selectBoardOne" parameterType="java.util.Map" resultType="boardDTO">
+		SELECT
+			<include refid="columnBoard" />
+		FROM TB_BOARD
+		WHERE DEL = 'N' AND ID = #{id}
+	</select>
+       
+	<insert id="insertBoard" parameterType="boardDTO">
+		INSERT INTO TB_BOARD(
+			<include refid="columnBoard" />
+		)
+		VALUES(
+			#{id},
+			#{code},
+			#{userid},
+			#{name},
+			#{subject},
+			#{contents},
+			#{passwd},
+			#{filename},
+			#{filesize},
+			#{readcount},
+			DATE_FORMAT(now(), '%Y-%m-%d'),
+			'N'
+		)
+	</insert>
+       
+	<update id="updateBoard" parameterType="boardDTO">
+		UPDATE TB_BOARD SET
+			NAME = #{name},
+			SUBJECT = #{subject},
+			CONTENTS = #{contents},
+			FILENAME = #{filename},
+			FILESIZE = #{filesize}
+		WHERE ID = #{id}
+	</update>
+	
+	<update id="deleteBoard" parameterType="java.util.Map">
+		UPDATE TB_BOARD SET
+			DEL = 'Y'
+		WHERE ID = #{id}
+	</update>
+	
+	<select id="getMaxBoardID" resultType="int">
+		SELECT MAX(ID) FROM TB_BOARD
+	</select>
+	
+	<update id="upReadCount" parameterType="java.util.Map">
+		UPDATE TB_BOARD SET
+			READCOUNT = READCOUNT + 1
+		WHERE ID = #{id}
+	</update>
+	
+	<select id="selectLatestBoard" resultMap="resultBoard">
+		SELECT T.* FROM (
+			SELECT @RNUM := @RNUM + 1 AS ROWNUM, A.* FROM (
+				SELECT <include refid="columnBoard" /> FROM TB_BOARD
+				WHERE DEL = 'N'
+				ORDER BY ID DESC
+			) A,
+			( SELECT @RNUM := 0 ) R
+		) T
+		WHERE <![CDATA[ T.ROWNUM <= 5 ]]>
+	</select>
+	
+	<insert id="insertBoardReply" parameterType="boardReplyDTO">
+		INSERT INTO TB_BOARD_REPLY(
+			<include refid="columnBoardReply" />
+		)
+		VALUES(
+			#{id},
+			#{boardid},
+			#{userid},
+			#{name},
+			#{contents},
+			DATE_FORMAT(now(), '%Y-%m-%d')
+		)
+	</insert>
+	
+	<select id="selectBoardReply" parameterType="searchDTO" resultMap="resultBoardReply">
+		SELECT T.* FROM (
+			SELECT @RNUM := @RNUM + 1 AS ROWNUM, A.* FROM (
+				SELECT <include refid="columnBoardReply" /> FROM TB_BOARD_REPLY
+				WHERE BOARDID = #{code}
+				ORDER BY ID DESC
+			) A,
+			( SELECT @RNUM := 0 ) R
+		) T
+		WHERE <![CDATA[ T.ROWNUM >= #{startRow} and T.ROWNUM <= #{endRow} ]]>
+	</select>
+	
+	<update id="deleteBoardReply" parameterType="java.util.Map">
+		DELETE FROM TB_BOARD_REPLY
+		WHERE ID = #{id}
+	</update>
+
+</mapper>

@@ -1,0 +1,29 @@
+@CHARSET "UTF-8";
+
+.main_wrapper { width:100%; }
+.main_wrapper h1 { font-size:1.5em; border-bottom:1px dotted #fff; margin-bottom:10px; line-height:2em; }
+.main_wrapper section { margin-bottom:20px; }
+
+/* 커버 스토리 */
+.cover_story { position:relative; }
+.cover_story h2 { padding:10px 0 10px 40px; font-size:1.2em; }
+.cover_story h2:before { font-family:fontello; content:'\e804'; position:absolute; top:66px; left:10px; }
+.cover_story time { position:absolute; top:66px; right:10px; }
+.cover_story p { padding:10px; top:50px; left:0; line-height:1.3em; }
+
+/* 최근 개시판 */
+.latest_board { position:relative; }
+.latest_board ul { padding:10px 10px 10px 25px; line-height:1.3em; }
+.latest_board ul .row_empty { padding:50px 10px 50px 10px; line-height:1.3em; }
+.latest_board ul a { position:relative; }
+.latest_board ul a:before { content:""; position:absolute; width:0; height:0; background:transparent; border-style:solid; border-width:4px; top:5px; left:-12px;
+								border-color:transparent transparent transparent #fff; }
+.latest_board time { position:absolute; right:10px; }
+
+/* 새로나온 음악 */
+.new_music { position:relative; }
+.new_music ul { padding:10px 10px 10px 25px; line-height:1.3em; }
+.new_music ul a { position:relative; }
+.new_music ul a:before { content:""; position:absolute; width:0; height:0; background:transparent; border-style:solid; border-width:4px; top:5px; left:-12px;
+								border-color:transparent transparent transparent #fff; }
+.new_music time { position:absolute; right:10px; }

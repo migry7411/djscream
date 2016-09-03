@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mybatis.music">
+	
+	<resultMap id="resultMusic" type="musicDTO">
+		<id property="id" column="ID" javaType="java.lang.Integer" />
+		<result property="subject" column="SUBJECT" javaType="java.lang.String" />
+		<result property="contents" column="CONTENTS" javaType="java.lang.String" />
+		<result property="filename" column="FILENAME" javaType="java.lang.String" />
+		<result property="filesize" column="FILESIZE" javaType="java.lang.Integer" />
+		<result property="regdate" column="REGDATE" javaType="java.lang.String" />
+		<result property="code" column="CODE" javaType="java.lang.String" />
+	</resultMap>
+	
+	<sql id="columnMusic">
+		ID,
+		SUBJECT,
+		CONTENTS,
+		FILENAME,
+		FILESIZE,
+		REGDATE,
+		CODE
+	</sql>
+	
+	<select id="selectMusic" parameterType="searchDTO" resultMap="resultMusic">
+		SELECT T.* FROM (
+			SELECT @RNUM := @RNUM + 1 AS ROWNUM, A.* FROM (
+				SELECT <include refid="columnMusic" /> FROM TB_MUSIC
+				WHERE CODE = #{code}
+				<if test="searchWord != null and searchWord != ''">
+					AND ${searchColumn} LIKE '%${searchWord}%'
+				</if>
+				ORDER BY ID DESC
+			) A,
+			( SELECT @RNUM := 0 ) R
+		) T
+		WHERE <![CDATA[ T.ROWNUM >= #{startRow} and T.ROWNUM <= #{endRow} ]]>
+	</select>
+	
+</mapper>

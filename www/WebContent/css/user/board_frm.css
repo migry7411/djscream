@@ -1,0 +1,8 @@
+@CHARSET "UTF-8";
+
+#frm { width:100%; margin-bottom:50px; }
+#frm table { line-height:2em; margin:0 auto 30px auto; }
+#frm label { display:inline-block; width:100px; }
+#frm input[type="text"], #frm input[type="file"] { width:400px; }
+#frm textarea { width:500px; height:300px; resize:none; }
+#frm .btn { text-align:center; border-top:1px dotted #fff; padding-top:10px; }

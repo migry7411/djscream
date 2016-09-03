@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mybatis.cover">
+	
+	<resultMap id="resultCover" type="coverDTO">
+		<id property="id" column="ID" javaType="java.lang.Integer" />
+		<result property="subject" column="SUBJECT" javaType="java.lang.String" />
+		<result property="contents" column="CONTENTS" javaType="java.lang.String" />
+		<result property="regdate" column="REGDATE" javaType="java.lang.String" />
+	</resultMap>
+	
+	<sql id="columnCover">
+		ID,
+		SUBJECT,
+		CONTENTS,
+		REGDATE
+	</sql>
+	
+	<select id="selectCover" parameterType="searchDTO" resultMap="resultCover">
+		SELECT T.* FROM (
+			SELECT @RNUM := @RNUM + 1 AS ROWNUM, A.* FROM (
+				SELECT <include refid="columnCover" /> FROM TB_COVER_STORY
+				ORDER BY ID DESC
+			) A,
+			( SELECT @RNUM := 0 ) R
+		) T
+		WHERE <![CDATA[ T.ROWNUM >= #{startRow} and T.ROWNUM <= #{endRow} ]]>
+	</select>
+	
+	<select id="countCover" resultType="int">
+		SELECT COUNT(*) FROM TB_COVER_STORY
+	</select>
+	
+	<select id="selectCoverLatest" resultType="CoverDTO">
+		SELECT T.* FROM (
+			SELECT @RNUM := @RNUM + 1 AS ROWNUM, A.* FROM (
+				SELECT <include refid="columnCover" /> FROM TB_COVER_STORY
+				ORDER BY ID DESC
+			) A,
+			( SELECT @RNUM := 0 ) R
+		) T
+		WHERE T.ROWNUM = 1
+	</select>
+	
+	<insert id="insertCover" parameterType="CoverDTO">
+		INSERT INTO TB_COVER_STORY (
+			<include refid="columnCover" />
+		) VALUES (
+			#{id},
+			#{subject},
+			#{contents},
+			DATE_FORMAT(now(), '%Y-%m-%d')
+		)
+	</insert>
+	
+	<delete id="deleteCover" parameterType="java.util.Map">
+		DELETE FROM TB_COVER_STORY
+		WHERE ID = #{id}
+	</delete>
+	
+	<select id="getMaxCoverID" resultType="int">
+		SELECT MAX(ID) FROM TB_COVER_STORY
+	</select>
+	
+</mapper>

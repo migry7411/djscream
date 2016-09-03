@@ -1,0 +1,6 @@
+@CHARSET "UTF-8";
+
+#frm table { margin:0 auto 30px auto; }
+#frm td { padding:10px 0; }
+#frm .btn { text-align:center; border-top:1px dotted #fff; padding-top:10px; }
+#frm span { font-size:0.8em; }

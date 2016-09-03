@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mybatis.boardcode">
+
+	<resultMap id="resultBoardCode" type="boardCodeDTO">
+		<id property="id" column="ID" javaType="java.lang.String" />
+		<result property="name" column="NAME" javaType="java.lang.String" />
+		<result property="use_board" column="USE_BOARD" javaType="java.lang.String" />
+		<result property="use_html_tag" column="USE_HTML_TAG" javaType="java.lang.String" />
+		<result property="write_auth" column="WRITE_AUTH" javaType="java.lang.String" />
+		<result property="use_reply" column="USE_REPLY" javaType="java.lang.String" />
+	</resultMap>
+	
+	<sql id="columnBoardCode">
+		ID,
+		NAME,
+		USE_BOARD,
+		USE_HTML_TAG,
+		WRITE_AUTH,
+		USE_REPLY
+	</sql>
+	
+	<select id="selectBoardCode" parameterType="java.util.Map" resultMap="resultBoardCode">
+		SELECT <include refid="columnBoardCode" /> FROM TB_BOARD_CODE
+		<if test="mode.equals('U')">
+			WHERE USE_BOARD = 'Y'
+		</if>
+	</select>
+	
+	<select id="selectBoardCodeOne" parameterType="java.util.Map" resultType="boardCodeDTO">
+		SELECT <include refid="columnBoardCode" /> FROM TB_BOARD_CODE
+		WHERE ID = #{id}
+	</select>
+	
+	<insert id="insertBoardCode" parameterType="boardCodeDTO">
+		INSERT INTO TB_BOARD_CODE (
+			<include refid="columnBoardCode" />
+		) VALUES (
+			#{id},
+			#{name},
+			#{use_board},
+			#{use_html_tag},
+			#{write_auth},
+			#{use_reply}
+		)
+	</insert>
+	
+	<update id="updateBoardCode" parameterType="boardCodeDTO">
+		UPDATE TB_BOARD_CODE SET
+			NAME = #{name},
+			USE_BOARD = #{use_board},
+			USE_HTML_TAG = #{use_html_tag},
+			WRITE_AUTH = #{write_auth},
+			USE_REPLY = #{use_reply}
+		WHERE ID = #{id}
+	</update>
+	
+	<select id="getMaxBoardCodeID" resultType="String">
+		SELECT MAX(ID) FROM TB_BOARD_CODE
+	</select>
+	
+</mapper>

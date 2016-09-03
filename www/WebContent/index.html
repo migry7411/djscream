@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>DJ SCREAM</title>
+<meta name="keywords" content="DJ SCREAM, Music">
+<meta name="description" content="음악 관련 사이트">
+<link rel="stylesheet" href="css/user/style.css">
+<!--[if lt IE 9]>
+<script type="text/javascript" src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" charset="UTF-8">
+<!--
+function getSubMenu(num) {
+	if(num == 0) {
+		$("#sub_music").css("display", "none");
+		$("#sub_board").css("display", "none");
+	} else if(num == 1) {
+		$("#sub_music").css("display", "block");
+		$("#sub_board").css("display", "none");
+	} else {
+		$("#sub_music").css("display", "none");
+		$("#sub_board").css("display", "block");
+	}
+}
+//-->
+</script>
+</head>
+<body>
+	<div id="wrapper">
+		<header id="header">
+			<h1 class="logo" >
+				<a href="#">DJ SCREAM</a>
+			</h1>
+			<nav>
+				<h1 class="hidden">메뉴</h1>
+				<ul class="main_menu">
+					<li><a href="#" onmouseover="getSubMenu(0)">HOME</a></li>
+					<li><a href="#" onmouseover="getSubMenu(0)">ABOUT</a></li>
+					<li>
+						<a href="#" onmouseover="getSubMenu(1)">MUSIC</a>
+						<ul id="sub_music">
+							<li><a href="#">가요</a></li>
+							<li><a href="#">팝송</a></li>
+							<li><a href="#">클래식</a></li>
+							<li><a href="#">기타</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="#" onmouseover="getSubMenu(2)">BOARD</a>
+						<ul id="sub_board">
+							<li><a href="#">자유개시판</a></li>
+							<li><a href="#">NEWS</a></li>
+							<li><a href="#">묻고답하기</a></li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+		</header>
+		<section id="contents">
+			<div class="column">
+				<section class="login">
+					<h1>LOGIN</h1>
+					<form action="javascript:alert('환영합니다.');">
+						<fieldset>
+							<legend>로그인 폼</legend>
+							<p>
+								<label for="user_id">ID</label>
+								<input type="text" id="user_id" required placeholder="아이디">
+							</p>
+							<p>
+								<label for="user_pw">PW</label>
+								<input type="password" id="user_pw" required placeholder="비밀번호">
+							</p>
+							<button type="submit">로그인</button>
+						</fieldset>
+					</form>
+					<ul class="member_info">
+						<li><a href="#">회원가입</a></li>
+						<li><a href="#">아이디 찾기</a></li>
+						<li><a href="#">비밀번호 찾기</a></li>
+					</ul>
+				</section>
+				<section class="banner">
+					<h1 class="hidden">배너</h1>
+					<a href="http://blog.naver.com/migry" target="_blank">Love Deficiency Syndrome</a>
+					<a href="http://www.cyworld.com/migry7411" target="_blank">Inner Peace...</a>
+				</section>
+			</div>
+			<div class="column">
+				<section class="cover_story">
+					<h1>커버 스토리</h1>
+					<div class="cover_story_wrap">
+						<h2>혼자만의 이별</h2>
+						<time datetime="2013-07-12">2013-07-12</time>
+						<p>
+							거칠게 살아왔던 나의 모습으로<br />
+							그대 앞에 당당히 나설 수가 없어..<br />
+							소용없는 짓이라고 날 탓해보지만<br />
+							변함없는 미련에 난 어쩔수 없어..<br />
+							그대여 너무 모자란 내게 기회를 주지마..<br />
+							자신할 수 없는 내 미래에 불행해져..<br />
+							난 지금 떠나야겠어...<br />
+							그대 행복을 바래..<br />
+							익숙해진 이 길을 떠나네..
+						</p>
+					</div>
+				</section>
+				<section class="latest_board">
+					<h1>최근 개시판</h1>
+					<ul>
+						<li><a href="#">Dream is come tonight</a><time datetime="2013-07-12">2013-07-12</time></li>
+						<li><a href="#">You never lie tonight</a><time datetime="2013-07-12">2013-07-12</time></li>
+						<li><a href="#">한번도 널 지워본 적 없어...</a><time datetime="2013-07-12">2013-07-12</time></li>
+						<li><a href="#">쉽게 바래버릴 그녀잖아</a><time datetime="2013-07-12">2013-07-12</time></li>
+						<li><a href="#">제발 이렇게 날 떠나지마....</a><time datetime="2013-07-12">2013-07-12</time></li>
+					</ul>
+				</section>
+				<section class="new_music">
+					<h1>새로나온 음악</h1>
+					<ul>
+						<li><a href="#">임땅덩 - 소주 한 잔</a><time datetime="2013-07-12">2013-07-12</time></li>
+						<li><a href="#">김범수 - 늪</a><time datetime="2013-07-12">2013-07-12</time></li>
+						<li><a href="#">로이킴 - 봄봄봄</a><time datetime="2013-07-12">2013-07-12</time></li>
+						<li><a href="#">노홍철 - 노가르시아</a><time datetime="2013-07-12">2013-07-12</time></li>
+						<li><a href="#">최종훈 - 말년에 모태솔로라니...</a><time datetime="2013-07-12">2013-07-12</time></li>
+					</ul>
+				</section>
+			</div>
+		</section>
+		<footer id="footer">
+			<ul>
+				<li><a href="#" title="트위터"><span>트위터</span></a></li>
+				<li><a href="#" title="페이스북"><span>페이스북</span></a></li>
+				<li>Copyright &copy; 2013 by migry. All Rights Reserved.</li>
+			</ul>
+		</footer>
+	</div>
+</body>
+</html>

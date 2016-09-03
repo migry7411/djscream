@@ -1,0 +1,20 @@
+@CHARSET "UTF-8";
+
+.list { float:left; width:280px; height:300px; overflow:auto; border:1px solid #fff; margin-bottom:50px; }
+.list li { display:inline-block; width:49%; }
+
+.row_header, .rows { padding:5px 0 5px 0; width:100%; text-align:center; }
+.row_header { font-weight:bold; color:#000; background: #fff; /* Old browsers */
+				background: -moz-linear-gradient(top, #666 0%, #999 50%, #ccc 666%); /* FF3.6+ */
+				background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#666), color-stop(50%,#999), color-stop(100%,#666)); /* Chrome,Safari4+ */
+				background: -webkit-linear-gradient(top, #666 0%,#999 50%,#666 100%); /* Chrome10+,Safari5.1+ */
+				background: -o-linear-gradient(top, #666 0%,#999 50%,#666 100%); /* Opera 11.10+ */
+				background: -ms-linear-gradient(top, #666 0%,#999 50%,#666 100%); /* IE10+ */
+				background: linear-gradient(to bottom, #666 0%,#999 50%,#666 100%); /* W3C */ }
+.rows:hover { cursor:pointer; color:#ccc; }
+
+.detail { float:right; width:330px; }
+.detail p { line-height:2em; }
+.detail .lbl { display:inline-block; width:130px; }
+.detail span label { margin-right:5px; }
+.detail button { margin:20px 0 0 3px; }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<properties resource="net/migry/mybatis/db.properties" />
+
+	<typeAliases>
+		<typeAlias alias="memberDTO" type="net.migry.dto.Member"/>
+		<typeAlias alias="searchDTO" type="net.migry.dto.Search"/>
+		<typeAlias alias="boardDTO" type="net.migry.dto.Board"/>
+		<typeAlias alias="boardReplyDTO" type="net.migry.dto.BoardReply"/>
+		<typeAlias alias="boardCodeDTO" type="net.migry.dto.BoardCode"/>
+		<typeAlias alias="musicDTO" type="net.migry.dto.Music"/>
+		<typeAlias alias="musicCodeDTO" type="net.migry.dto.MusicCode"/>
+		<typeAlias alias="coverDTO" type="net.migry.dto.CoverStory"/>
+	</typeAliases>
+
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED" >
+				<property name="driver" value="${driver}" />
+				<property name="url" value="${url}" />
+				<property name="username" value="${user}" />
+				<property name="password" value="${pwd}" />
+				<property name="poolMaximumActiveConnections" value="20" />
+				<property name="poolMaximumIdleConnections" value="20" />
+				<property name="poolMaximumCheckoutTime" value="20000" />
+				<property name="poolPingEnabled" value="true" />
+				<property name="poolPingQuery" value="select 1 from dual" />
+				<property name="poolPingConnectionsNotUsedFor" value="43200" />
+				<property name="poolTimeToWait" value="30000" />
+				<property name="driver.encoding" value="UTF-8" />
+			</dataSource>
+		</environment>
+	</environments>
+        
+	<mappers>
+		<mapper resource="net/migry/mybatis/sql/member.xml" />	<!-- 회원 -->
+		<mapper resource="net/migry/mybatis/sql/board.xml" />	<!-- 개시판 -->
+		<mapper resource="net/migry/mybatis/sql/board_code.xml" />	<!-- 개시판 코드 -->
+		<mapper resource="net/migry/mybatis/sql/music.xml" />	<!-- 으악 -->
+		<mapper resource="net/migry/mybatis/sql/music_code.xml" />	<!-- 으악 코드 -->
+		<mapper resource="net/migry/mybatis/sql/coverstory.xml" />	<!-- 커버 스토리 -->
+	</mappers>
+
+</configuration>
+
+
+
