@@ -21,7 +21,7 @@
 	
 	<resultMap id="resultBoardReply" type="boardReplyDTO">
 		<id property="id" column="ID" javaType="java.lang.Integer" />
-		<result property="boardid" column="BOARDID" javaType="java.lang.String" />
+		<result property="boardid" column="BOARDID" javaType="java.lang.Integer" />
 		<result property="name" column="NAME" javaType="java.lang.String" />
 		<result property="userid" column="USERID" javaType="java.lang.String" />
 		<result property="contents" column="CONTENTS" javaType="java.lang.String" />
@@ -166,9 +166,18 @@
 		WHERE <![CDATA[ T.ROWNUM >= #{startRow} and T.ROWNUM <= #{endRow} ]]>
 	</select>
 	
+	<select id="countBoardReply" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(*) FROM TB_BOARD_REPLY
+		WHERE BOARDID = #{boardid}
+	</select>
+	
 	<update id="deleteBoardReply" parameterType="java.util.Map">
 		DELETE FROM TB_BOARD_REPLY
 		WHERE ID = #{id}
 	</update>
+	
+	<select id="getMaxBoardReplyID" resultType="int">
+		SELECT MAX(ID) FROM TB_BOARD_REPLY
+	</select>
 
 </mapper>
