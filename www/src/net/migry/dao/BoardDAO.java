@@ -108,7 +108,7 @@ public class BoardDAO {
     	ss.close();
     }
     
-    public int getNewID() throws Exception {
+    public int getNewBoardID() throws Exception {
 		int id = 0;
 		
     	SqlSession ss = sqlMapper.openSession();
@@ -190,5 +190,33 @@ public class BoardDAO {
 		ss.close();
 		
 		return list;
+    }
+    
+    public int countBoardReply(String boardid) throws Exception {
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	map.put("boardid", boardid);
+    	
+    	SqlSession ss = sqlMapper.openSession();
+		int count = ss.selectOne("mybatis.board.countBoardReply", map);
+		ss.close();
+		
+		return count;
+    }
+    
+    public int getNewBoardReplyID() throws Exception {
+		int id = 0;
+		
+    	SqlSession ss = sqlMapper.openSession();
+		Object temp = ss.selectOne("mybatis.board.getMaxBoardReplyID");
+		ss.close();
+		
+		if(temp == null) {
+			id = 1;
+		} else {
+			id = (Integer)temp;
+			id++;
+		}
+		
+		return id;
     }
 }

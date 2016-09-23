@@ -6,9 +6,15 @@
 <head>
 <title><spring:message code='contents.board.detail' /></title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user/board_detail.css">
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/reply.js"></script>
 <script type="text/javascript"  charset="UTF-8">
 <!--
 var flag = false;
+
+$(function(){
+	listReply(0, 0, "${board.id}", "listBoardReply.do");
+});
+
 
 function checkPasswd(id, value) {
 	$.ajax({
@@ -97,14 +103,21 @@ function deleteProc() {
 	location.href = url;
 }
 
-function validation(frm) {
-	if(frm.contents.value == "") {
-		alert("<spring:message code='messages.board.contents' />");
-		frm.contents.focus();
-		return false;
+function goReplyProc() {
+	var frm = $("form[name='frmReply']").serializeArray();
+	var param = {};
+	
+	for(var i=0; i<frm.length; i++) {
+		if(frm[i].name == "contents" && frm[i].value == "") {
+			alert("<spring:message code='messages.board.contents' />");
+			$('textarea[name="contents"]').focus();
+			return;
+		}
+		
+		param[frm[i].name] = frm[i].value;
 	}
 	
-	return true;
+	replyProc(param, "replyProc.do", "listBoardReply.do");
 }
 
 function openImage(width, height) {
@@ -139,26 +152,22 @@ function openImage(width, height) {
 	</div>
 	<c:if test="${login != null}">
 	<div class="reply">
-		<ul>
-			<li>댓글 쓰기</li>
-			<li>
-				<form action="reply.do" method="post" onsubmit="return validation(this)">
-					<fieldset>
-						<input type="text" name="contents" required /> 
-						<button type="submit"><spring:message code='contents.common.confirm' /></button>
-					</fieldset>
-				</form>
-			</li>
-		</ul>
+		<form name="frmReply" action="javascript:goReplyProc()" method="post">
+			<fieldset>
+				<input type="hidden" name="boardid" value="${board.id}" />
+				<input type="hidden" name="userid" value="${login.userid}" />
+				<input type="hidden" name="name" value="${login.nickname}" />
+				<ul>
+					<li><spring:message code='contents.reply.write' /></li>
+					<li><textarea name="contents" required></textarea></li>
+					<li class="btn"><button type="submit"><spring:message code='contents.common.confirm' /></button> <button type="reset"><spring:message code='contents.common.cancel' /></button></li>
+				</ul>
+			</fieldset>
+		</form>
 	</div>
 	</c:if>
 	<div class="reply">
-		<ul>
-			<li>댓글 목록</li>
-			<li>all the memories of hate and the lies</li>
-			<li>don't you know eventually we'll pay the price</li>
-			<li>all the hopes and the dreams will survive</li>
-			<li>reunite we got to keep our faith alive</li>
+		<ul id="replyList">
 		</ul>
 	</div>
 </body>

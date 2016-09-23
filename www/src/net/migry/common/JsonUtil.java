@@ -1,6 +1,7 @@
 package net.migry.common;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,9 +26,8 @@ public class JsonUtil {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static void parseJSONList(List<Map<String, Object>> list, HttpServletResponse response) {
+	public static String parseJSONList(List<Map<String, Object>> list) {
 		JSONArray arr = new JSONArray();
-		JSONObject json = new JSONObject();
 		
 		for(Map<String, Object> map : list) {
 			JSONObject obj = new JSONObject();
@@ -41,14 +41,17 @@ public class JsonUtil {
 			arr.add(obj);
 		}
 		
-		json.put("result", arr);
+		return arr.toJSONString();
+	}
+	
+	public static List<Map<String, Object>> toMapList(List<?> paramList) throws Exception {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		try {
-			response.getWriter().write(json.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
+		for(Object obj : paramList) {
+			Map<String, Object> map = Utility.convertDtoToMap(obj);
+			list.add(map);
 		}
+		
+		return list;
 	}
 }

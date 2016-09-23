@@ -1,7 +1,10 @@
 package net.migry.common;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -80,13 +83,13 @@ public class Utility {
     	String str;
     	
     	str = comment.replaceAll("<", "&lt;");
-    	str = comment.replaceAll(">", "&gt;");
-    	str = comment.replaceAll("\r\n", "<br />");
+    	str = str.replaceAll(">", "&gt;");
+    	str = str.replaceAll("\r\n", "<br />");
         
     	return str;
     }
     
-    public static String reply_paging(int nowPage,int nowBlock,int totalRecord,int numPerPage,int num){
+    public static String reply_paging(int nowPage,int nowBlock,int totalRecord,int numPerPage,String url,String code){
         int total_page = 0;    //전체 페이지 수       
         int total_block = 0;   //전체 블럭 수      
         int page_per_block =0; //블럭당 보여줄  페이지 수(기본값은 10페이지)    
@@ -120,27 +123,27 @@ public class Utility {
         if(totalRecord != 0){
             if(nowBlock > 0){ //1블럭이상 -> 11page 이상
                 //이전 10개 링크, 이전 블럭으로 이동
-                pre_link = "<a href='javascript:listReply(" + (nowBlock-1) + ", ";
-                pre_link += ((nowBlock-1)*page_per_block) + ", " + num + ")'>";
-                pre_link += "이전"+ page_per_block+"개</a>";
+                pre_link = "[<a href='javascript:listReply(" + (nowBlock-1) + ", ";
+                pre_link += ((nowBlock-1)*page_per_block) + ", " + code + ", \"" + url + "\")'>";
+                pre_link += "이전"+ page_per_block+"개</a>]";
             }
             for (int i = 0; i < page_per_block; i++) {
                 // 현재 블럭당 페이지 링크 
-            	now_link += " <a href='javascript:listReply(" + nowBlock + ", ";
-                now_link += ((nowBlock*page_per_block) + i) + ", " + num + ")'>";
-                now_link += ((nowBlock * page_per_block) + i + 1)+"</a>";
+            	now_link += " [<a href='javascript:listReply(" + nowBlock + ", ";
+                now_link += ((nowBlock*page_per_block) + i) + ", " + code + ", \"" + url + "\")'>";
+                now_link += ((nowBlock * page_per_block) + i + 1)+"</a>]";
                 //마지막 페이지이면 페이지 번호 출력을 종료
                 if ((nowBlock * page_per_block) + i + 1 == total_page)  break;
             }
             if (total_block > nowBlock + 1) {
                 // 다음 블럭으로 이동 링크
-            	next_link = " <a href='javascript:listReply(" + (nowBlock + 1) + ", ";
-                next_link += ((nowBlock + 1) * page_per_block) + ", " + num + ")'>";
-                next_link += "다음 "+page_per_block+"개</a>";
+            	next_link = " [<a href='javascript:listReply(" + (nowBlock + 1) + ", ";
+                next_link += ((nowBlock + 1) * page_per_block) + ", " + code + ", \"" + url + "\")'>";
+                next_link += "다음 "+page_per_block+"개</a>]";
             } 
         }
         // 이전 10개 ::: 1 2 3 4 5 6 7 8 9 10 ::: 다음 10개
-        link_str=pre_link+":::"+now_link+":::"+next_link;
+        link_str=pre_link + now_link + next_link;
         
         return link_str;
     }
@@ -179,6 +182,18 @@ public class Utility {
     	PageInfo pageinfo = new PageInfo(nowPage, nowBlock, searchColumn, searchWord, code);
     	
     	return pageinfo;
+    }
+    
+    public static Map<String, Object> convertDtoToMap(Object obj) throws Exception {
+    	Field[] fields = obj.getClass().getDeclaredFields();
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		for(int i=0; i<=fields.length-1;i++){
+			fields[i].setAccessible(true);
+			resultMap.put(fields[i].getName(), fields[i].get(obj));
+		}
+		
+		return resultMap;
     }
 }
 

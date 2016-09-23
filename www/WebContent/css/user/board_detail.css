@@ -15,8 +15,16 @@
 .reply li:first-child:before { content:""; position:absolute; width:0; height:0; background:transparent; border-style:solid; border-width:6px; top:11px; left:11px;
 								border-color:transparent transparent transparent #fff; }
 .reply li:last-child { border-bottom:0px; }
-.reply input { font-size:1.2em; width:540px; }
+.reply textarea { font-size:1.2em; width:580px; height:100px; }
 .reply button { font-size:1.2em; }
+.reply .btn { text-align:right; }
+.reply .center { text-align:center; }
+.reply .row { display:block; }
+.reply table { width:100%; margin-top:-10px; }
+.reply tr { line-height:1.5em; }
+.reply td { width:60%; padding-bottom:10px; }
+.reply td:first-child { width:25%; }
+.reply td:last-child { width:15%; text-align:right; }
 
 #modal ul { padding:5px; }
 #modal li { text-align:center; padding:5px 0; font-size:1.3em; }

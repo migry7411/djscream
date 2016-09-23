@@ -18,7 +18,7 @@
 .latest_board ul a { position:relative; }
 .latest_board ul a:before { content:""; position:absolute; width:0; height:0; background:transparent; border-style:solid; border-width:4px; top:5px; left:-12px;
 								border-color:transparent transparent transparent #fff; }
-.latest_board time { position:absolute; right:10px; }
+.latest_board  time { float:right; right:10px; }
 
 /* 새로나온 음악 */
 .new_music { position:relative; }
@@ -26,4 +26,4 @@
 .new_music ul a { position:relative; }
 .new_music ul a:before { content:""; position:absolute; width:0; height:0; background:transparent; border-style:solid; border-width:4px; top:5px; left:-12px;
 								border-color:transparent transparent transparent #fff; }
-.new_music time { position:absolute; right:10px; }
+.new_music time { float:right; right:10px; }

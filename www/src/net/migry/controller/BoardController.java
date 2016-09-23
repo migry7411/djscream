@@ -2,6 +2,7 @@ package net.migry.controller;
 
 import java.awt.Image;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.ImageIcon;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +28,7 @@ import net.migry.dao.BoardCodeDAO;
 import net.migry.dao.BoardDAO;
 import net.migry.dto.Board;
 import net.migry.dto.BoardCode;
+import net.migry.dto.BoardReply;
 import net.migry.dto.Member;
 import net.migry.dto.PageInfo;
 import net.migry.dto.Search;
@@ -33,6 +37,9 @@ import net.migry.dto.Search;
 public class BoardController {
 	private static BoardDAO dao = null;
 	private static BoardCodeDAO codedao = null;
+	
+	@Autowired
+	private MessageSource messageSource;
 	
 	static {
 		dao = new BoardDAO();
@@ -63,6 +70,19 @@ public class BoardController {
     		
         	Search s = new Search(pageinfo.getSearchColumn(), pageinfo.getSearchWord(), startRow, endRow, pageinfo.getCode());
         	List<Board> list = dao.selectBoard(s);
+        	
+        	if(list.size() < 1) {
+        		beginPerPage = (pageinfo.getNowPage() - 1) * numPerPage;
+            	
+            	startRow = beginPerPage + 1;
+        		endRow = beginPerPage + numPerPage;
+        		
+        		s.setStartRow(startRow);
+        		s.setEndRow(endRow);
+        		
+        		list = dao.selectBoard(s);
+        	}
+        	
         	int count = dao.countBoard(s);
         	String url = "listBoard.do";
         	String paging = Utility.paging(pageinfo.getSearchColumn(), pageinfo.getSearchWord(), pageinfo.getNowPage(), pageinfo.getNowBlock(),
@@ -143,7 +163,7 @@ public class BoardController {
 	        		dto.setFilesize((int)file.length());
 	            }
 	        	
-	        	dto.setId(dao.getNewID());
+	        	dto.setId(dao.getNewBoardID());
 				dao.insertBoard(dto);
 				return "redirect:listBoard.do?code=" + dto.getCode();
 	        }
@@ -347,6 +367,89 @@ public class BoardController {
         	System.out.println("Board Delete Proc 에러 : " + ex.toString());
         	ex.printStackTrace();
         	return "redirect:/common/error.do";
+        }
+	}
+	
+	// 게시판 댓글 목록 조회
+	@RequestMapping("/user/board/listBoardReply.do")
+    public void listBoardReply(HttpServletRequest request, HttpServletResponse response) {
+		int beginPerPage = 0;		// 시작 레코드 번호
+		int numPerPage = NumPerPage.BOARD_REPLY;		// 한 페이지당 보여줄 레코드 개수
+		
+        try {
+        	PageInfo pageinfo = Utility.getPageInfo(request);
+        	
+        	// 시작 레코드번호 값 부여
+        	beginPerPage = pageinfo.getNowPage() * numPerPage;
+        	
+        	int startRow = beginPerPage + 1;
+    		int endRow = beginPerPage + numPerPage;
+    		
+        	Search s = new Search("", "", startRow, endRow, pageinfo.getCode());
+        	List<BoardReply> list = dao.selectBoardReply(s);
+        	
+        	if(list.size() < 1) {
+        		beginPerPage = (pageinfo.getNowPage() - 1) * numPerPage;
+            	
+            	startRow = beginPerPage + 1;
+        		endRow = beginPerPage + numPerPage;
+        		
+        		s.setStartRow(startRow);
+        		s.setEndRow(endRow);
+        		
+        		list = dao.selectBoardReply(s);
+        	}
+        	
+        	int count = dao.countBoardReply(pageinfo.getCode());
+        	String url = "listBoardReply.do";
+        	String paging = Utility.reply_paging(pageinfo.getNowPage(), pageinfo.getNowBlock(), count, numPerPage, url, pageinfo.getCode());
+        	
+        	Member loginMember = (Member)(request.getSession().getAttribute("login"));
+        	String loginId = "";
+        	List<Map<String, Object>> jsonList = JsonUtil.toMapList(list);
+        	
+        	if(loginMember != null) {
+        		loginId = loginMember.getUserid();
+        	}
+        	
+        	Map<String, Object> map = new HashMap<String, Object>();
+        	map.put("list", JsonUtil.parseJSONList(jsonList));
+        	map.put("paging", paging);
+        	map.put("loginid", loginId);
+        	map.put("msgList", messageSource.getMessage("contents.reply.list", null, null));
+        	map.put("msgEmpty", messageSource.getMessage("messages.common.list.empty", null, null));
+        	
+        	JsonUtil.parseJSON(map, response);
+        } catch (Exception ex) {
+        	System.out.println("Board Reply List 에러 : " + ex.toString());
+        	ex.printStackTrace();
+        }
+    }
+	
+	// 게시판 댓글 쓰기 처리
+	@RequestMapping(value = "/user/board/replyProc.do", method = RequestMethod.POST)
+	public void insertBoardReplyProc(@ModelAttribute BoardReply dto, HttpServletRequest request, HttpServletResponse response) {
+		try {			
+			Member loginMember = (Member)(request.getSession().getAttribute("login"));
+	        
+			if(loginMember == null) {
+				return;
+	        } else if(dto == null) {
+	        	return;
+	        } else if(!loginMember.getUserid().equals(dto.getUserid())) {
+	        	return;
+	        } else {
+	        	dto.setId(dao.getNewBoardReplyID());
+				dao.insertBoardReply(dto);
+				
+				Map<String, Object> map = new HashMap<String, Object>();
+	        	map.put("boardid", dto.getBoardid());
+	        	
+	        	JsonUtil.parseJSON(map, response);
+	        }
+        } catch (Exception ex) {
+        	System.out.println("Board Reply Insert Proc 에러 : " + ex.toString());
+        	ex.printStackTrace();
         }
 	}
 }

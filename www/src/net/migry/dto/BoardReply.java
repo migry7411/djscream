@@ -2,7 +2,7 @@ package net.migry.dto;
 
 public class BoardReply {
 	private int id;
-	private String boardid;
+	private int boardid;
 	private String userid;
 	private String name;
 	private String contents;
@@ -14,10 +14,10 @@ public class BoardReply {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getBoardid() {
+	public int getBoardid() {
 		return boardid;
 	}
-	public void setBoardid(String boardid) {
+	public void setBoardid(int boardid) {
 		this.boardid = boardid;
 	}
 	public String getUserid() {
