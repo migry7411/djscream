@@ -24,7 +24,18 @@ function checkPasswd(id, value) {
  		, data: { "id" : id }
  		, success: function(data) {
  			if(data.result.passwd == value) {
- 				flag = true;
+ 				var url = "deleteBoard.do?id=${board.id}";
+ 				url = url + "&userid=${board.userid}";
+ 				url = url + "&filename=${board.filename}";
+ 				url = url + "&nowPage=${pageinfo.nowPage}";
+ 				url = url + "&nowBlock=${pageinfo.nowBlock}";
+ 				url = url + "&searchColumn=${pageinfo.searchColumn}";
+ 				url = url + "&searchWord=${pageinfo.searchWord}";
+ 				url = url + "&code=${pageinfo.code}";
+ 				location.href = url;
+ 			} else {
+ 				alert("<spring:message code='messages.member.password' />");
+ 				$('input[name="passwd"]').focus();
  			}
 		}
 		, error: function(data, status, err) {
@@ -54,16 +65,18 @@ function goUpdate() {
 }
 
 function goDelete() {
-	openModal(300, 110);
-	
-	var html = "<ul>";
-	html = html + "<li><spring:message code='messages.member.password' /></li>";
-	html = html + "<li><input type='password' name='passwd' id='passwd' maxlength='20' required /></li>";
-	html = html + "<li><button type='button' onclick='deleteProc()'><spring:message code='contents.common.confirm' /></button> ";
-	html = html + "<button type='button' onclick='closeModal()'><spring:message code='contents.common.close' /></button></li>";
-	html = html + "</ul>";
-	
-	$("#modal").html(html);
+	if(confirm("<spring:message code='messages.common.delete' />")) {
+		openModal(300, 110);
+		
+		var html = "<ul>";
+		html = html + "<li><spring:message code='messages.member.password' /></li>";
+		html = html + "<li><input type='password' name='passwd' id='passwd' maxlength='20' required /></li>";
+		html = html + "<li><button type='button' onclick='deleteProc()'><spring:message code='contents.common.confirm' /></button> ";
+		html = html + "<button type='button' onclick='closeModal()'><spring:message code='contents.common.close' /></button></li>";
+		html = html + "</ul>";
+		
+		$("#modal").html(html);
+	}
 }
 
 function goDetail(id) {
@@ -84,23 +97,6 @@ function deleteProc() {
 	}
 	
 	checkPasswd("${board.id}", $("#passwd").val());
-	
-	if(flag == false) {
-		alert("<spring:message code='messages.member.password.check' />");
-		$("#passwd").val("");
-		$('input[name="passwd"]').focus();
-		return;
-	}
-	
-	var url = "deleteBoard.do?id=${board.id}";
-	url = url + "&userid=${board.userid}";
-	url = url + "&filename=${board.filename}";
-	url = url + "&nowPage=${pageinfo.nowPage}";
-	url = url + "&nowBlock=${pageinfo.nowBlock}";
-	url = url + "&searchColumn=${pageinfo.searchColumn}";
-	url = url + "&searchWord=${pageinfo.searchWord}";
-	url = url + "&code=${pageinfo.code}";
-	location.href = url;
 }
 
 function goReplyProc() {
@@ -118,6 +114,13 @@ function goReplyProc() {
 	}
 	
 	replyProc(param, "replyProc.do", "listBoardReply.do");
+}
+
+function goDeleteReply(id, userid) {
+	if(confirm("<spring:message code='messages.common.delete' />")) {
+		var param = { id : id, userid : userid, boardid : "${board.id}" };
+		replyProc(param, "replyDeleteProc.do", "listBoardReply.do");
+	}
 }
 
 function openImage(width, height) {

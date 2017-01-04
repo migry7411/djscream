@@ -26,7 +26,16 @@ function listReply(nowBlock, nowPage, code, url) {
  				html = html + "<li class='row'><table>";
  				
  				for(var i=0; i<list.length; i++) {
- 					html = html + "<tr><td>" + list[i].name + "</td><td>" + parseContents(list[i].contents) + "</td><td>" + list[i].regdate + "</td></tr>";
+ 					html = html + "<tr>";
+ 					html = html + "<td>" + list[i].name + "</td><td>" + parseContents(list[i].contents) + "</td><td>" + list[i].regdate + "</td>";
+ 					
+ 					if(loginid != "" && loginid == list[i].userid) {
+ 						html = html + "<td><a href='javascript:goDeleteReply(" + list[i].id + ", \"" + list[i].userid + "\")'>X</a></td>";
+ 					} else {
+ 						html = html + "<td>&nbsp;</td>";
+ 					}
+ 					
+ 					html = html + "</tr>";
  				}
  				
  				html = html + "</table></li>";
@@ -36,7 +45,6 @@ function listReply(nowBlock, nowPage, code, url) {
  			$("#replyList").html(html);
 		}
 		, error: function(data, status, err) {
-			console.log(data);
 			alert(err);
 		}
 	});

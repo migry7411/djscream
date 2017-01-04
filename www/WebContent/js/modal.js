@@ -7,6 +7,8 @@ function openModal(width, height) {
 	$('#modal').css("width", width);
 	$('#modal').css("height", height);
 	$('#modal_back').css("display", "block");
+	$("#modal_back").width($(document).width());
+	$("#modal_back").height($(document).height());
 }
 
 function closeModal() {

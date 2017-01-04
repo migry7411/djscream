@@ -2,7 +2,6 @@ package net.migry.controller;
 
 import java.awt.Image;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -449,6 +448,32 @@ public class BoardController {
 	        }
         } catch (Exception ex) {
         	System.out.println("Board Reply Insert Proc 에러 : " + ex.toString());
+        	ex.printStackTrace();
+        }
+	}
+	
+	// 게시판 댓글 삭제 처리
+	@RequestMapping(value = "/user/board/replyDeleteProc.do", method = RequestMethod.POST)
+	public void deleteBoardReplyProc(@ModelAttribute BoardReply dto, HttpServletRequest request, HttpServletResponse response) {
+		try {			
+			Member loginMember = (Member)(request.getSession().getAttribute("login"));
+	        
+			if(loginMember == null) {
+				return;
+	        } else if(dto == null) {
+	        	return;
+	        } else if(!loginMember.getUserid().equals(dto.getUserid())) {
+	        	return;
+	        } else {
+				dao.deleteBoardReply(dto.getId());
+				
+				Map<String, Object> map = new HashMap<String, Object>();
+	        	map.put("boardid", dto.getBoardid());
+	        	
+	        	JsonUtil.parseJSON(map, response);
+	        }
+        } catch (Exception ex) {
+        	System.out.println("Board Reply Delete Proc 에러 : " + ex.toString());
         	ex.printStackTrace();
         }
 	}
