@@ -24,6 +24,7 @@
 			SELECT @RNUM := @RNUM + 1 AS ROWNUM, A.* FROM (
 				SELECT <include refid="columnCover" /> FROM TB_COVER_STORY
 				ORDER BY ID DESC
+				LIMIT 18446744073709551615
 			) A,
 			( SELECT @RNUM := 0 ) R
 		) T
@@ -39,6 +40,7 @@
 			SELECT @RNUM := @RNUM + 1 AS ROWNUM, A.* FROM (
 				SELECT <include refid="columnCover" /> FROM TB_COVER_STORY
 				ORDER BY ID DESC
+				LIMIT 18446744073709551615
 			) A,
 			( SELECT @RNUM := 0 ) R
 		) T

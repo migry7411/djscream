@@ -196,10 +196,20 @@ public class BoardController {
 				//Search s = new Search(pageinfo.getSearchColumn(), pageinfo.getSearchWord(), 0, 0, pageinfo.getCode());
 				//Board before = dao.selectBoardBeforeAndAfter(s, id, "before");
 				//Board after = dao.selectBoardBeforeAndAfter(s, id, "after");
+	        	
+	        	String path = "";
+	        	Image img = null;
 				
 				if(board.getFilename() != null && !board.getFilename().equals("")) {
-					String path = request.getSession().getServletContext().getRealPath(FileService.boardSavePath);
-					Image img = new ImageIcon(path + "/" + board.getFilename()).getImage();
+					path = request.getSession().getServletContext().getRealPath(FileService.boardSavePath);
+					File f = new File(path + "/" + board.getFilename());
+					
+					if(f == null || !f.exists()) {
+						path = request.getSession().getServletContext().getRealPath("/images");
+						board.setFilename("noimage.png");
+					}
+					
+					img = new ImageIcon(path + "/" + board.getFilename()).getImage();
 					width = img.getWidth(null); 		//가로 사이즈
 					height = img.getHeight(null);		//세로 사이즈
 				}

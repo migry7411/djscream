@@ -34,6 +34,7 @@
 					AND ${searchColumn} LIKE '%${searchWord}%'
 				</if>
 				ORDER BY ID DESC
+				LIMIT 18446744073709551615
 			) A,
 			( SELECT @RNUM := 0 ) R
 		) T

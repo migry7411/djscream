@@ -29,7 +29,7 @@
 					<li><a href="<%= root %>/admin/board/listBoard.do">개시판 관리</a></li>
 					<li><a href="<%= root %>/admin/music/listMusic.do">으악개시판 관리</a></li>
 					<li><a href="<%= root %>/admin/cover/listCover.do">커버스토리 관리</a></li>
-					<li><a href="#">통계</a></li>
+					<li><a href="<%= root %>/admin/stats/statistics.do">통계</a></li>
 					<li><a href="<%= root %>/user/main.do">메인 페이지</a></li>
 				</ul>
 			</nav>

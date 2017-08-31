@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mybatis.stats">
+
+	<select id="selectBoardStats" resultType="java.util.Map">
+		select
+		  a.name,
+		  count(b.id) as value
+		from tb_board_code a
+		  left outer join tb_board b on a.id = b.code
+		group by b.code
+		order by a.id
+	</select>
+
+</mapper>

@@ -44,6 +44,7 @@
 		<mapper resource="net/migry/mybatis/sql/music.xml" />	<!-- 으악 -->
 		<mapper resource="net/migry/mybatis/sql/music_code.xml" />	<!-- 으악 코드 -->
 		<mapper resource="net/migry/mybatis/sql/coverstory.xml" />	<!-- 커버 스토리 -->
+		<mapper resource="net/migry/mybatis/sql/statistics.xml" />	<!-- 통계 -->
 	</mappers>
 
 </configuration>

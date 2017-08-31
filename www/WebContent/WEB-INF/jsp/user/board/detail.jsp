@@ -125,7 +125,17 @@ function goDeleteReply(id, userid) {
 
 function openImage(width, height) {
 	openModal(width+20, height+20);
-	var html = "<div class='img'><a href='javascript:closeModal()'><img src='${pageContext.request.contextPath}/upload/board/${board.filename}' border='0' /></a></div>";
+	
+	var filename = "${board.filename}";
+	var src = "";
+	
+	if(filename == "noimage.png") {
+		src = "${pageContext.request.contextPath}/images/" + filename;
+	} else {
+		src = "${pageContext.request.contextPath}/upload/board/" + filename;
+	}
+	
+	var html = "<div class='img'><a href='javascript:closeModal()'><img src='" + src + "' border='0' /></a></div>";
 	$("#modal").html(html);
 }
 //-->
